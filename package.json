@@ -1,12 +1,24 @@
 {
   "name": "maybe-zod",
-  "module": "index.ts",
-  "version": "0.11.0",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "version": "0.4.0",
   "description": "A lightweight TypeScript utility library that combines Zod schema validation with error handling using a Maybe monad pattern. This library provides a clean and type-safe way to validate data and handle errors without try-catch blocks.",
   "type": "module",
   "scripts": {
     "dev": "bun run --watch index.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "build": "bun run build.ts",
+    "prepublishOnly": "bun run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -33,5 +45,8 @@
   "bugs": {
     "url": "https://github.com/thonymg/maybe-zod/issues"
   },
-  "homepage": "https://github.com/thonymg/maybe-zod#readme"
+  "homepage": "https://github.com/thonymg/maybe-zod#readme",
+  "dependencies": {
+    "bun-plugin-dts": "^0.3.0"
+  }
 }
