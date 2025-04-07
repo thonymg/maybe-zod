@@ -3,7 +3,7 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "A lightweight TypeScript utility library that combines Zod schema validation with error handling using a Maybe monad pattern. This library provides a clean and type-safe way to validate data and handle errors without try-catch blocks.",
   "type": "module",
   "scripts": {
