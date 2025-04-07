@@ -42,6 +42,10 @@ const userSchema = z.object({
   email: z.string().email(),
 });
 
+type User = z.infer<typeof userSchema>;
+// Define your Output schema
+type UserOutput = User && { displayName: string }
+
 // Define your processing function
 const processUser = (user: z.infer<typeof userSchema>) => ({
   ...user,
@@ -49,7 +53,7 @@ const processUser = (user: z.infer<typeof userSchema>) => ({
 });
 
 // Create a validated processor
-const validateUser = Maybe(processUser, userSchema);
+const validateUser = Maybe<User, UserOutput>(processUser, userSchema);
 
 // Use it with valid data
 const [error, result] = validateUser({
@@ -86,8 +90,13 @@ const advancedSchema = z.object({
   })
 });
 
-const processData = (data: z.infer<typeof advancedSchema>) => data.id;
-const validate = Maybe(processData, advancedSchema);
+
+type Advanced = z.infer<typeof advancedSchema>;
+// Define your Output schema
+type AdvancedOutput = { id: string }
+
+const processData = (data: Advanced) => data.id;
+const validate = Maybe<Advanced, AdvancedOutput>(processData, advancedSchema);
 
 const [error, result] = validate({
   id: '123e4567-e89b-12d3-a456-426614174000',
@@ -114,7 +123,12 @@ const resultSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('error'), message: z.string() })
 ]);
 
-const validateResult = Maybe(
+type OptionalS = z.infer<typeof optionalSchema>;
+// Define your Output schema
+type ResultS = z.infer<typeof resultSchema>;
+
+
+const validateResult = Maybe<OptionalS, ResultS>(
   (data) => data.type === 'success' ? data.value : 0,
   resultSchema
 );
@@ -128,7 +142,7 @@ const [error, result] = validateResult({ type: 'success', value: 42 });
 ```typescript
 const numberArraySchema = z.array(z.number());
 const sum = (numbers: number[]) => numbers.reduce((a, b) => a + b, 0);
-const validateSum = Maybe(sum, numberArraySchema);
+const validateSum = Maybe<number[], number>(sum, numberArraySchema);
 
 const [error, result] = validateSum([1, 2, 3, 4, 5]);
 // result = 15
@@ -164,13 +178,13 @@ try {
 
 ## API Reference
 
-### `Maybe<T>`
+### `Maybe<T, U>`
 
 ```typescript
-Maybe<T>(
-  fn: (params: T) => unknown,
+Maybe<T, U>(
+  fn: (params: T) => U,
   schema: z.ZodSchema<T>
-) => (data: T) => [string | null, unknown | null]
+) => (data: T) => [string | null, U | null]
 ```
 
 Creates a validation wrapper for synchronous data processing.
@@ -180,13 +194,13 @@ Creates a validation wrapper for synchronous data processing.
 - `schema`: A Zod schema that defines the shape and validation rules for the data
 - Returns a function that takes input data and returns a tuple of [error, result]
 
-### `AsyncMaybe<T>`
+### `AsyncMaybe<T, U>`
 
 ```typescript
-AsyncMaybe<T>(
-  fn: (params: T) => unknown,
+AsyncMaybe<T, U>(
+  fn: (params: T) => U,
   schema: z.ZodSchema<T>
-) => (data: Promise<T>) => Promise<[string | null, unknown | null]>
+) => (data: Promise<T>) => Promise<[string | null, U | null]>
 ```
 
 Creates a validation wrapper for asynchronous data processing.

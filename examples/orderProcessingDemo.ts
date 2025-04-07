@@ -26,5 +26,5 @@ const invalidOrder: any = {
   }
 };
 
-const [orderErr] = Maybe<Order>(() => {}, orderSchema)(invalidOrder);
+const [orderErr] = Maybe<Order, string>(() => {return 'error'}, orderSchema)(invalidOrder);
 console.log('Order Processing Errors:', orderErr);

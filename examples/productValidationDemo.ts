@@ -17,5 +17,5 @@ const invalidProduct = {
   stock: -5
 };
 
-const [productErr] = Maybe<Product>(() => {}, productSchema)(invalidProduct);
+const [productErr] = Maybe<Product, string>(() => {return 'error'}, productSchema)(invalidProduct);
 console.log('Product Validation Errors:', productErr);

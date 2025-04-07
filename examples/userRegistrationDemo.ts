@@ -17,11 +17,11 @@ const invalidUser = {
   age: 17
 };
 
-const [userErr] = Maybe<User>(() => {}, userSchema)(invalidUser);
+const [userErr] = Maybe<User, string>(() => {return 'error'}, userSchema)(invalidUser);
 console.log('User Registration Errors:', userErr);
 
 
-AsyncMaybe<User>(() => {}, userSchema)(Promise.resolve(invalidUser))
+AsyncMaybe<User, string>(() => {return 'error'}, userSchema)(Promise.resolve(invalidUser))
   .then(([asyncErr]) => {
     console.log('\nAsync User Registration Errors:', asyncErr);
   });

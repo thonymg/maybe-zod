@@ -17,7 +17,7 @@ const invalidPost: any = {
   publishDate: new Date("2020-01-01")
 };
 
-AsyncMaybe<Post>((d: Post) => d.title, postSchema ) (Promise.resolve(invalidPost))
+AsyncMaybe<Post, string>((d: Post) => d.title, postSchema ) (Promise.resolve(invalidPost))
   .then(([postErr]) => {
     console.log('Blog Post Errors:', postErr);
   });
